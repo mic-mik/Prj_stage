@@ -1,0 +1,146 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="siteA.master.cs" Inherits="client" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <asp:ContentPlaceHolder ID="title" runat="server">
+        </asp:ContentPlaceHolder>
+    </title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="css/styles.css" rel="stylesheet" />
+   
+</head>
+<body>
+
+    <form id="form1" runat="server">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-gradient">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="/" title="Library Logo">
+                    <i class="fas fa-book book-icon h1 me-2"></i>
+                    <span class="h5">Biblio Campus</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <div class="d-flex align-items-center me-auto">
+                        <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control me-2"
+                            placeholder="Rechercher des livres..." aria-label="Search" OnKeyPress="return handleKeyPress(event)" />
+                        <asp:LinkButton ID="btnSearch" runat="server" OnClick="btnSearch_Click"
+                            CssClass="btn btn-outline-light" title="Search">Rechercher</asp:LinkButton>
+                    </div>
+                    <div class="navbar-nav ms-auto">
+                        <div id="dvAuthLink" runat="server" class="d-flex">
+                            <a class="nav-link" href="/" title="Consult Books">Consulter livre</a>
+                            <a class="nav-link" href="BorrowBook.aspx" title="Borrow Book">Emprunter livre</a>
+                            <a class="nav-link" href="ReturnBook.aspx" title="Return Book">Retourner Livre</a>
+                            <a class="nav-link" href="PayFine.aspx" title="Pay Fine">Payer amende </a>
+                            <a class="nav-link" href="ReserveBook.aspx" title="Reserve Book">Reserver livre</a>
+                        </div>
+                        <asp:Panel ID="pnlLogout" runat="server" Visible="false">
+                            <asp:LinkButton runat="server" class="btn btn-outline-light ms-2"
+                                title="Logout" ID="logoutbtn" OnClick="LinqLogout_Click">Déconnexion</asp:LinkButton>
+                        </asp:Panel>
+
+                        <asp:Panel ID="pnlAuth" runat="server">
+                            <button class="btn btn-outline-light ms-2" data-bs-toggle="modal"
+                                data-bs-target="#loginModal" title="Log In">
+                                Se Connecter</button>
+                            <button class="btn btn-outline-light ms-2" data-bs-toggle="modal"
+                                data-bs-target="#registerModal" title="Sign Up">
+                                S'inscrire</button>
+                        </asp:Panel>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+
+
+        <!-- Container for dynamic content -->
+        <div class="content container mt-4">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white mt-3">
+            <div class="container text-center py-4">
+                <p class="mb-2">&copy; 2024 Biblio Campus. Tous droits réservés..</p>
+                <p class="mb-0">
+                    <a href="#" class="text-white text-decoration-none me-3">Privacy Policy</a>
+                    <span class="text-muted">|</span>
+                    <a href="#" class="text-white text-decoration-none ms-3">Terms of Service</a>
+                </p>
+            </div>
+        </footer>
+
+
+        <!-- Login Modal -->
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalLabel">Se Connecter</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <asp:TextBox ID="txtLoginEmail" runat="server" CssClass="form-control" placeholder="Username" required></asp:TextBox>
+                        <asp:TextBox ID="txtLoginPassword" runat="server" CssClass="form-control mt-3" TextMode="Password" placeholder="Password" required></asp:TextBox>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <asp:LinkButton ID="btnLogin" runat="server" CssClass="btn btn-primary" OnClick="btnLogin_Click">Se Connecter</asp:LinkButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Modal -->
+        <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="registerModalLabel">S'inscrire</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <asp:TextBox ID="txtRegisterEmail" runat="server" CssClass="form-control" placeholder="Email" required></asp:TextBox>
+                        <asp:TextBox ID="txtRegisterPassword" runat="server" CssClass="form-control mt-3" TextMode="Password" placeholder="Password" required></asp:TextBox>
+                        <asp:TextBox ID="txtRegisterConfirmPassword" runat="server" CssClass="form-control mt-3" TextMode="Password" placeholder="Confirm Password" required></asp:TextBox>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <asp:LinkButton ID="btnRegister" runat="server" CssClass="btn btn-primary" Text="Sign Up" OnClick="btnRegister_Click">Inscrire</asp:LinkButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <script>
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                // Prevent the default action of the Enter key
+                event.preventDefault();
+                // Trigger the search button click
+                document.getElementById('<%= btnSearch.ClientID %>').click();
+            }
+        }
+</script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
